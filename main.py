@@ -1,79 +1,33 @@
-from tkinter import *
-from tkinter import messagebox
-from random import randint
+import random
 
+def play_guess_the_number():
+    """Запускает игру 'Угадай число'."""
 
-# Окно приложения
-root = Tk()
-root.geometry("500x300")
-root.title("Игра Угадай Число")
-root.configure(bg="ivory")
+    secret_number = random.randint(1, 10)
+    attempts_left = 3
 
+    print("Добро пожаловать в игру 'Угадай число'!")
+    print("Я загадал число от 1 до 10. У вас есть 3 попытки, чтобы угадать его.")
 
-# Функция Генератор Чисел
-def GenerateNumberFunc():
-    global Number
-    # Создать число
-    Number = randint(1, 15)
+    while attempts_left > 0:
+        try:
+            guess = int(input(f"Попытка {4 - attempts_left}: Введите ваше предположение: "))
+        except ValueError:
+            print("Некорректный ввод. Пожалуйста, введите целое число.")
+            continue
 
-    # MessageBox показывает, что случайное число было сгенерировано
-    messagebox.showinfo("A number was generated", "Число было сгенерировано! Пожалуйста, угадайте Число")
+        if guess == secret_number:
+            print(f"Поздравляю! Вы угадали число {secret_number}!")
+            return # Завершаем игру, если угадали
 
+        elif guess < secret_number:
+            print("Загаданное число больше.")
+        else:
+            print("Загаданное число меньше.")
 
-# Функция Отгадки Числа
-def GuessNumberFunc():
-    global Number
-    # Получает Значение из поля Answer Entry
-    UserResponse = AnswerEntry.get()
+        attempts_left -= 1
 
-    # Конвертирует Значение из поля Answer Entry в Number
-    UserResponse = int(UserResponse)
+    print(f"Вы проиграли. Загаданное число было {secret_number}.")
 
-    # Проверяет если User Response был больше, меньше, или равен правильному числу
-    if UserResponse > Number:
-        ResultLabel.config(text="Неправильно! Загаданное число меньше", fg='Red')
-    elif UserResponse < Number:
-        ResultLabel.config(text="Неправильно! Загаданное число больше", fg='Red')
-    else:
-        ResultLabel.config(text="Вы отгадали! Загаданное число {}".format(Number), fg="Green")
-        AnswerEntry.delete(0, "end")
-
-
-# Заголовок
-Title = Label(root, text="Игра Угадай Число", font=("Arial",30))
-Title.pack()
-
-
-# Main Frame
-MainFrame = Frame(root)
-MainFrame.pack(pady=40)
-MainFrame.configure(bg="ivory")
-
-
-# Метка Угадайте Число
-GuessNumLabel = Label(MainFrame, text="Угадайте число от 1 до 15:", font=("Arial",20))
-GuessNumLabel.pack()
-
-
-# Текстовое поле Ответ
-AnswerEntry = Entry(MainFrame, font=("Arial",16))
-AnswerEntry.pack(pady=10)
-
-
-# Кнопка Генератор Чисел
-GenerateNumberBtn = Button(MainFrame, text="Сгенерировать число", width=16, font=("Arial",16), bg='orange', fg='Dodgerblue', command=GenerateNumberFunc)
-GenerateNumberBtn.pack()
-
-
-# Кнопка Угадать
-GuessBtn = Button(MainFrame, text="Угадать", width=16, font=("Arial",16), bg='orange', fg='#15e650', command=GuessNumberFunc)
-GuessBtn.pack(pady=5)
-
-
-# Метка Результат
-ResultLabel = Label(MainFrame, text="", font=("Arial", 16))
-ResultLabel.pack()
-
-
-# Mainloop
-root.mainloop()
+if __name__ == "__main__":
+    play_guess_the_number()
